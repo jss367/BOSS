@@ -104,7 +104,7 @@ def train_one_epoch(
         
         ims_x_strong = ims_x_strong.cuda()
         ims_x_weak = ims_x_weak.cuda()
-        lbs_x = lbs_x.cuda()
+        lbs_x = lbs_x.type(torch.LongTensor).cuda()
         ims_u_weak = ims_u_weak.cuda()
         ims_u_strong = ims_u_strong.cuda()
 
@@ -127,7 +127,7 @@ def train_one_epoch(
             with torch.no_grad():
                 lbs_u_real = lbs_u_real[valid_u].cuda()
                 corr_lb = lbs_u_real == lbs_u
-                loss_u_real = F.cross_entropy(logits_u, lbs_u_real)
+                loss_u_real = F.cross_entropy(logits_u, lbs_u_real.type(torch.LongTensor).cuda())
         else:
             logits_x = model(ims_x_weak)
             loss_x = criteria_x(logits_x, lbs_x)
